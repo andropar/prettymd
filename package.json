@@ -1,0 +1,116 @@
+{
+  "name": "prettymd",
+  "displayName": "PrettyMD",
+  "description": "Beautiful markdown preview with refined typography and elegant styling",
+  "version": "1.0.0",
+  "publisher": "andropar",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "markdown",
+    "preview",
+    "typography",
+    "reader",
+    "beautiful",
+    "elegant",
+    "reading"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andropar/prettymd"
+  },
+  "bugs": {
+    "url": "https://github.com/andropar/prettymd/issues"
+  },
+  "homepage": "https://github.com/andropar/prettymd#readme",
+  "activationEvents": [
+    "onCommand:prettymd.openPretty"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "prettymd.openPretty",
+        "title": "Open Pretty Preview"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "prettymd.openPretty",
+          "when": "resourceLangId == markdown",
+          "group": "navigation"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "command": "prettymd.openPretty",
+          "when": "resourceLangId == markdown",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "PrettyMD",
+      "properties": {
+        "prettymd.maxWidth": {
+          "type": "string",
+          "default": "680px",
+          "description": "Maximum content width (e.g., '680px', '45rem')"
+        },
+        "prettymd.fontSize": {
+          "type": "string",
+          "default": "18px",
+          "description": "Base font size (e.g., '18px', '1.125rem')"
+        },
+        "prettymd.fontFamily": {
+          "type": "string",
+          "default": "Georgia, 'Times New Roman', serif",
+          "description": "Font family for body text"
+        },
+        "prettymd.theme": {
+          "type": "string",
+          "enum": [
+            "warm",
+            "cool",
+            "dark",
+            "paper"
+          ],
+          "default": "warm",
+          "description": "Color theme: warm (cream/sepia), cool (light blue), dark (elegant dark), paper (white/minimal)"
+        },
+        "prettymd.lineHeight": {
+          "type": "string",
+          "default": "1.8",
+          "description": "Line height for body text"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "@vscode/vsce": "^2.22.0",
+    "eslint": "^8.54.0",
+    "sharp": "^0.34.5",
+    "svg2img": "^1.0.0-beta.2",
+    "typescript": "^5.3.2"
+  },
+  "dependencies": {
+    "marked": "^11.0.0"
+  }
+}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Icon Converter</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: #f0f0f0;
+            font-family: system-ui, sans-serif;
+        }
+        canvas {
+            border: 2px solid #ccc;
+            background: white;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        p {
+            margin-top: 10px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h2>PrettyMD Icon Converter</h2>
+    <canvas id="canvas" width="128" height="128"></canvas>
+    <button onclick="downloadPNG()">Download icon.png</button>
+    <p>Click the button above to download the 128x128 PNG icon</p>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // SVG data
+        const svgData = `<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#faf8f3;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f0ede4;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="20" fill="url(#bgGradient)"/>
+  <rect x="2" y="2" width="124" height="124" rx="18" fill="none" stroke="#d4b896" stroke-width="1" opacity="0.5"/>
+  <g transform="translate(64, 64)">
+    <rect x="-32" y="-28" width="6" height="56" fill="#b8634a" rx="1"/>
+    <rect x="-26" y="-28" width="6" height="35" fill="#b8634a" rx="1" transform="rotate(20 -23 -10.5)"/>
+    <rect x="0" y="-28" width="6" height="35" fill="#b8634a" rx="1" transform="rotate(-20 3 -10.5)"/>
+    <rect x="26" y="-28" width="6" height="56" fill="#b8634a" rx="1"/>
+    <rect x="-35" y="32" width="70" height="3" fill="#d4b896" rx="1.5"/>
+  </g>
+  <circle cx="24" cy="24" r="2" fill="#b8634a" opacity="0.6"/>
+  <circle cx="104" cy="24" r="2" fill="#b8634a" opacity="0.6"/>
+  <circle cx="24" cy="104" r="2" fill="#b8634a" opacity="0.6"/>
+  <circle cx="104" cy="104" r="2" fill="#b8634a" opacity="0.6"/>
+</svg>`;
+
+        // Convert SVG to image
+        const img = new Image();
+        const blob = new Blob([svgData], { type: 'image/svg+xml' });
+        const url = URL.createObjectURL(blob);
+
+        img.onload = function() {
+            ctx.drawImage(img, 0, 0);
+            URL.revokeObjectURL(url);
+        };
+
+        img.src = url;
+
+        function downloadPNG() {
+            canvas.toBlob(function(blob) {
+                const link = document.createElement('a');
+                link.download = 'icon.png';
+                link.href = URL.createObjectURL(blob);
+                link.click();
+            });
+        }
+    </script>
+</body>
+</html>
