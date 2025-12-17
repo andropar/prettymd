@@ -2,8 +2,9 @@
   "name": "prettymd",
   "displayName": "PrettyMD",
   "description": "Beautiful markdown preview with refined typography and elegant styling",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "andropar",
+  "icon": "icon.png",
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -27,9 +28,6 @@
     "url": "https://github.com/andropar/prettymd/issues"
   },
   "homepage": "https://github.com/andropar/prettymd#readme",
-  "activationEvents": [
-    "onCommand:prettymd.openPretty"
-  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
