@@ -2,7 +2,7 @@
   "name": "prettymd",
   "displayName": "PrettyMD",
   "description": "Beautiful markdown preview with refined typography and elegant styling",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "publisher": "andropar",
   "icon": "icon.png",
   "engines": {
