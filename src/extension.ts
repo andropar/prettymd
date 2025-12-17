@@ -23,7 +23,11 @@ export function activate(context: vscode.ExtensionContext) {
             vscode.ViewColumn.Beside,
             {
                 enableScripts: true,
-                retainContextWhenHidden: true
+                retainContextWhenHidden: true,
+                localResourceRoots: [
+                    vscode.Uri.file(path.dirname(fileUri.fsPath)),
+                    vscode.Uri.joinPath(context.extensionUri, 'node_modules')
+                ]
             }
         );
 
@@ -34,6 +38,26 @@ export function activate(context: vscode.ExtensionContext) {
         const fontFamily = config.get<string>('fontFamily', "Georgia, 'Times New Roman', serif");
         const theme = config.get<string>('theme', 'warm');
         const lineHeight = config.get<string>('lineHeight', '1.8');
+
+        // Configure marked renderer to convert image paths to webview URIs
+        const renderer = new marked.Renderer();
+        const originalImageRenderer = renderer.image.bind(renderer);
+        renderer.image = (href: string, title: string | null, text: string) => {
+            let src = href;
+
+            // Convert relative paths to webview URIs
+            if (href && !href.startsWith('http://') && !href.startsWith('https://') && !href.startsWith('data:')) {
+                const imagePath = path.isAbsolute(href)
+                    ? href
+                    : path.join(path.dirname(fileUri.fsPath), href);
+                const imageUri = vscode.Uri.file(imagePath);
+                src = panel.webview.asWebviewUri(imageUri).toString();
+            }
+
+            return originalImageRenderer(src, title, text);
+        };
+
+        marked.use({ renderer });
 
         // Parse markdown
         const html = await marked.parse(content);
@@ -51,6 +75,23 @@ export function activate(context: vscode.ExtensionContext) {
         const changeDisposable = vscode.workspace.onDidChangeTextDocument(async (e) => {
             if (e.document.uri.toString() === fileUri.toString()) {
                 const newContent = e.document.getText();
+
+                // Use the same renderer for updates
+                const updateRenderer = new marked.Renderer();
+                const originalImgRenderer = updateRenderer.image.bind(updateRenderer);
+                updateRenderer.image = (href: string, title: string | null, text: string) => {
+                    let src = href;
+                    if (href && !href.startsWith('http://') && !href.startsWith('https://') && !href.startsWith('data:')) {
+                        const imagePath = path.isAbsolute(href)
+                            ? href
+                            : path.join(path.dirname(fileUri.fsPath), href);
+                        const imageUri = vscode.Uri.file(imagePath);
+                        src = panel.webview.asWebviewUri(imageUri).toString();
+                    }
+                    return originalImgRenderer(src, title, text);
+                };
+                marked.use({ renderer: updateRenderer });
+
                 const newHtml = await marked.parse(newContent);
                 panel.webview.postMessage({
                     type: 'update',
