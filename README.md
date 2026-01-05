@@ -18,6 +18,10 @@ A VS Code extension that renders markdown files with beautiful, refined typograp
 
 ## Installation
 
+### From VS Code Marketplace
+
+Install directly from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=andropar.prettymd).
+
 ### From Source
 
 1. Clone or download this repository
